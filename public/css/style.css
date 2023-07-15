@@ -1,0 +1,25 @@
+.glassMOdel{
+    top: 25%;
+    left: 35%;
+    width:30%;
+    
+}
+.card{
+    cursor: pointer;
+}
+@media screen and (max-width: 900px) {
+    .card {
+      width: 70px;
+      height: 50px;
+      
+    }
+    
+  }
+ .text {
+  
+  top: 75%;
+  left: 26%;
+  background-color: rgba(202, 107, 18, 0.301);
+  width: 48%;
+ }
+ 
