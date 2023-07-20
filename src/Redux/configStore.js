@@ -1,9 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { sinhVienReduce } from "./formRedux";
+import { sinhVienReduce } from "./redux";
 export const store = configureStore({
   reducer: {
     sinhVienReduce: sinhVienReduce,
-    // return state
     editSinhVien: { maSV: "", hoTen: "", soDT: "", email: "" },
   },
 });

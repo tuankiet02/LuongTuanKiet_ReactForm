@@ -11,10 +11,9 @@ class FormSinhVien extends Component {
 
     let newValue = this.state.values;
     newValue[id] = value;
-    // chech rổng
     let neworros = this.state.orros;
     if (newValue[id] == "") {
-      neworros[id] = `${id} không được để rổng`;
+      neworros[id] = `${id} không được để trống`;
     } else {
       neworros[id] = "";
       let type = event.target.getAttribute("data-type");
@@ -44,9 +43,6 @@ class FormSinhVien extends Component {
               /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             let checkEmail = regexEmail.test(newValue.email);
             if (!checkEmail) {
-              // {
-              //   neworros.email = "";
-              // } else
               neworros.email = "Nhập đúng định dạng email";
             }
           }
@@ -64,12 +60,10 @@ class FormSinhVien extends Component {
       orros: neworros,
       activeButton: valid,
     });
-    // });
   };
   handleSubmit = (event) => {
     event.preventDefault();
     this.props.themSinhVien({ ...this.state.values });
-    this.state.values = "";
   };
 
   componentDidUpdate(prevProps) {
@@ -97,7 +91,7 @@ class FormSinhVien extends Component {
           <div className="card-body">
             <div className="row mb-3">
               <div className="col-6">
-                <label htmlFor="">Mã Sinh Viên</label>
+                <label htmlFor="">Mã sinh viên</label>
                 <input
                   className="form-control"
                   type="text"
@@ -108,12 +102,12 @@ class FormSinhVien extends Component {
                 <p className="text-danger">{maSV}</p>
               </div>
               <div className="col-6">
-                <label htmlFor="">Họ Và Tên</label>
+                <label htmlFor="">Họ và tên</label>
                 <input
                   className="form-control"
                   type="text"
                   id="hoTen"
-                  value={this.state.values?.hoTen} // value={this.state.values.hoTen}
+                  value={this.state.values?.hoTen}
                   data-type="letter"
                   onChange={this.getValueInput}
                 />
@@ -122,7 +116,7 @@ class FormSinhVien extends Component {
             </div>
             <div className="row mb-3">
               <div className="col-6">
-                <label htmlFor="">Số Điện Thoại</label>
+                <label htmlFor="">Số điện thoại</label>
                 <input
                   className="form-control"
                   type="text"
@@ -134,7 +128,7 @@ class FormSinhVien extends Component {
                 <p className="text-danger">{soDT}</p>
               </div>
               <div className="col-6">
-                <label htmlFor="">EMail</label>
+                <label htmlFor="">Email</label>
                 <input
                   data-type="email"
                   className="form-control"
@@ -153,16 +147,16 @@ class FormSinhVien extends Component {
               type="submit"
               disabled={this.state.activeButton}
             >
-              Thêm Sinh Viên
+              Thêm sinh viên
             </button>
             <button
               className="btn btn-success"
               type="button"
               onClick={() => {
-                // this.props.capNhatThongTin({ ...this.state.values });
+                this.props.capNhatSinhVien({ ...this.state.values });
               }}
             >
-              Cập Nhập
+              Thêm cập nhật
             </button>
           </div>
         </form>
@@ -175,6 +169,13 @@ const mapDispatchToProps = (dispatch) => {
     themSinhVien: (sinhVien) => {
       const action = {
         type: "THEM_SINH_VIEN",
+        sinhVien,
+      };
+      dispatch(action);
+    },
+    capNhatSinhVien: (sinhVien) => {
+      const action = {
+        type: "CAP_NHAT_SV",
         sinhVien,
       };
       dispatch(action);

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import FormSinhVien from "./FormSinhVien";
 import { createRef } from "react";
 import { connect } from "react-redux";
@@ -10,48 +10,20 @@ class XuLyForm extends Component {
   }
   state = {
     arrThongTin: [],
+    useState: {
+      filteredStudents: [],
+      searchTerm: "",
+    },
   };
-  // themSinhVien = (sinhVien) => {
-  //   let newThongTin = this.state.arrThongTin;
-  //   newThongTin.push(sinhVien);
-  //   this.setState({
-  //     arrThongTin: newThongTin,
-  //   });
-  // };
-  // xoaSinhVien = (maSV) => {
-  //   let index = this.state.arrThongTin.findIndex((item) => item.maSV == maSV);
-  //   if (index != -1) {
-  //     let newThongTin = [...this.state.arrThongTin];
-  //     newThongTin.splice(index, 1);
-  //     this.setState({
-  //       arrThongTin: newThongTin,
-  //     });
-  //   }
-  // };
-  // layThongTinInput = (maSV) => {
-  //   let sinhVien = this.props.mangSinhVien.find(
-  //     (item) => item.maSV == sinhVien.maSV
-  //   );
-  //   // if (sinhVien) {
-  //   //   this.setState({
-  //   //     ...this.state,
-  //   //     sinhVien: sinhVien,
-  //   //   });
-  //   this.ref.current.setState({
-  //     ...this.ref.current.state,
-  //     values: sinhVien,
-  //   });
-  // };
-  // capNhatThongTin = (sinhVien) => {
-  //   let index = this.state.arrThongTin.findIndex(
-  //     (item) => item.maSV == sinhVien.maSV
-  //   );
-  //   if (index !== -1) {
-  //     let arrnewThongTin = [...this.state.arrThongTin];
-  //     arrnewThongTin[index] = sinhVien;
-  //     this.setState({ arrThongTin: arrnewThongTin });
-  //   }
-  // };
+  onChangeSearch = (event) => {
+    this.setState({ searchTerm: event.target.value });
+    console.log(this.state.searchTerm);
+  };
+  searchStudentHandler = () => {
+    this.props.SearchThongTin(this.state.searchTerm);
+    console.log(this.state.searchTerm);
+  };
+
   renderThongTin = () => {
     const { mangSinhVien } = this.props;
     return mangSinhVien.map((sinhVien, index) => {
@@ -62,7 +34,7 @@ class XuLyForm extends Component {
           <td>{sinhVien.soDT}</td>
           <td>{sinhVien.email}</td>
           <button
-            className="btn btn-danger"
+            className="btn btn-danger bg-danger"
             onClick={() => {
               this.props.xoaSinhVien(sinhVien.maSV);
             }}
@@ -70,12 +42,12 @@ class XuLyForm extends Component {
             Xóa
           </button>
           <button
-            className="btn btn-warning"
+            className="btn btn-warning bg-warning"
             onClick={() => {
               this.props.ThongTinSV(sinhVien);
             }}
           >
-            Sữa
+            Cập nhật
           </button>
         </tr>
       );
@@ -85,36 +57,38 @@ class XuLyForm extends Component {
     return (
       <div>
         <div className="container">
-          <h1 className="p-3 mb-2 bg-secondary text-white text-center">
-            THÔNG TIN SINH VIÊN
+          <h1 className="p-3 mb-2 bg-dark text-white text-center">
+            Danh sách sinh viên
           </h1>
           <FormSinhVien
-            // ref={this.ref}
             themSinhVien={this.themSinhVien}
             ThongTinSV={this.ThongTinSV}
-            // capNhatThongTin={this.capNhatThongTin}
           />
           <div>
             <div>
-              <label>Tìm Kiếm: </label>
-              <input className="inputSearch m-3" type="search" id="seach" />
+              <label>Tìm kiếm: </label>
+              <input
+                className="inputSearch m-3"
+                type="search"
+                id="seach"
+                value={this.state.searchTerm}
+                onChange={this.onChangeSearch}
+              />
               <button
                 type="search"
-                className="w-10 h-25"
-                onClick={() => {
-                  // this.props.dispatch();
-                }}
+                className="w-10 h-25 btn btn-outline-dark"
+                onClick={this.searchStudentHandler}
               >
                 Search
               </button>
             </div>
             <table className="table mt-2" cellPadding={20}>
-              <thead className="bg-secondary text-white">
-                <th>Mã Sinh Viên</th>
-                <th>Họ Và Tên</th>
-                <th>Số Điện Thoại</th>
-                <th>EMail</th>
-                <th>Hành Động</th>
+              <thead className="bg-dark text-white">
+                <th>Mã SV</th>
+                <th>Họ tên</th>
+                <th>Số điện thoại</th>
+                <th>Email</th>
+                <th></th>
               </thead>
               <tbody>{this.renderThongTin()}</tbody>
             </table>
@@ -123,9 +97,6 @@ class XuLyForm extends Component {
       </div>
     );
   }
-  // componentDidUpdate(prewProps,prewState){
-
-  // }
 }
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -146,6 +117,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(action);
     },
     SearchThongTin: (sinhVien) => {
+      console.log("redux", sinhVien);
       const action = {
         type: "SEARCH",
         sinhVien,
